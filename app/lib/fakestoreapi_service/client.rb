@@ -1,8 +1,10 @@
+# frozen_string_literal: true
+
 require 'faraday'
 
 module FakeStoreAPIService
   class Client
-    BASE_URL = 'https://fakestoreapi.com'.freeze
+    BASE_URL = 'https://fakestoreapi.com'
 
     def initialize
       @connection = Faraday.new(url: BASE_URL)
@@ -13,13 +15,13 @@ module FakeStoreAPIService
       JSON.parse(response.body)
     end
 
-    def get_user(user_id)
-      response = @connection.get('users/#{user_id}')
+    def get_user(_user_id)
+      response = @connection.get("users/#{user_id}")
       JSON.parse(response.body)
     end
 
-    def get_product(product_id)
-      response = @connection.get('/products/#{product_id}')
+    def get_product(_product_id)
+      response = @connection.get("/products/#{product_id}")
       JSON.parse(response.body)
     end
   end
