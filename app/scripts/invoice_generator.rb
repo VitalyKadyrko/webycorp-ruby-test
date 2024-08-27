@@ -22,6 +22,12 @@ module InvoiceGenerator
           currency: 'usd',
           unit_amount: product_data['price']
         })
+
+        stripe_invoice = Stripe::InvoiceItem.create({
+          customer: customer.id,
+          price: stripe_price.id,
+          quantity: cart_product['quantity']
+        })
     end
   end
 end
