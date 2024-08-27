@@ -11,5 +11,12 @@ module FakeStoreAPIService
       response = @connection.get('https://fakestoreapi.com/carts')
       JSON.parse(response.body)
     end
+
+    def get_user(user_id)
+      response = @connection.get("https://fakestoreapi.com/carts/users/#{user_id}")
+      JSON.parse(response.body)
+    end
+
+
   end
 end
