@@ -10,8 +10,7 @@ module InvoiceGenerator
         name: "#{user['firstname']} #{user['lastname']}"
       })
 
-      invoice_item_ids = []
-      cart['products'].each do |cart_product|
+      invoice_items = cart['products'].map do |cart_product|
         product_data = fakestore_client.get_product(cart_product['productId'])
 
         stripe_product = Stripe::Product.create({
@@ -24,12 +23,13 @@ module InvoiceGenerator
           unit_amount: product_data['price']
         })
 
-        stripe_invoice_item = Stripe::InvoiceItem.create({
+        invoice_item = Stripe::InvoiceItem.create({
           customer: customer.id,
           price: stripe_price.id,
           quantity: cart_product['quantity']
         })
-        invoice_item_ids << stripe_invoice_item.id
+
+        { invoice_item: invoice_item.id }
       end
 
       invoice = Stripe::Invoice.create({
@@ -37,6 +37,20 @@ module InvoiceGenerator
         auto_advance: false
       })
 
+      Stripe::Invoice.add_lines(
+        invoice.id, {
+          lines: invoice_items
+        })
+
     end
   end
 end
+
+Stripe::Invoice.add_lines(
+  'in_1NuhUa2eZvKYlo2CWYVhyvD9',
+  {
+    lines: [
+      {invoice_item: 'ii_1NuLVd2eZvKYlo2CRWY0Hqgi'},
+    ],
+  }
+)
