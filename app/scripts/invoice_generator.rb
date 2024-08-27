@@ -9,6 +9,13 @@ module InvoiceGenerator
         email: user['email'],
         name: "#{user['firstname']} #{user['lastname']}"
       })
+
+      cart['products'].each do |cart_product|
+        product_data = fakestore_client.get_product(cart_product['productId'])
+
+        stripe_product = Stripe::Product.create({
+          name: product_data['title']
+        })
     end
   end
 end
