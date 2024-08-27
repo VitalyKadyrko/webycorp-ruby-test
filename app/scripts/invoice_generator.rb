@@ -40,17 +40,9 @@ module InvoiceGenerator
       Stripe::Invoice.add_lines(
         invoice.id, {
           lines: invoice_items
-        })
+      })
 
+      Stripe::Invoice.finalize_invoice(invoice.id)
     end
   end
 end
-
-Stripe::Invoice.add_lines(
-  'in_1NuhUa2eZvKYlo2CWYVhyvD9',
-  {
-    lines: [
-      {invoice_item: 'ii_1NuLVd2eZvKYlo2CRWY0Hqgi'},
-    ],
-  }
-)
