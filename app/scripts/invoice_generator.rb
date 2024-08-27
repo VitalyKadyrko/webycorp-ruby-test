@@ -28,6 +28,13 @@ module InvoiceGenerator
           price: stripe_price.id,
           quantity: cart_product['quantity']
         })
+      end
+
+      invoice = Stripe::Invoice.create({
+        customer: customer.id,
+        auto_advance: false
+      })
+      
     end
   end
 end
