@@ -3,7 +3,11 @@
 module InvoiceGenerator
   def self.call
     Stripe.api_key = ENV.fetch('TEST_APP__STRIPE__API_KEY', nil)
+    Stripe.logger = Application.logger
+    Stripe.log_level = Stripe::LEVEL_INFO
+
     fakestore_client = FakeStoreAPIService::Client.new
+
     carts = fakestore_client.get_carts_list
     carts.each do |cart|
       user = fakestore_client.get_user(cart['userId'])
