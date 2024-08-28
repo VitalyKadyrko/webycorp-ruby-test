@@ -1,5 +1,6 @@
 # frozen_string_literal: true
 
+# Module for create an invoice based on data received from the FakeStoreAPI service
 module InvoiceGenerator
   def self.call
     Stripe.api_key = ENV.fetch('TEST_APP__STRIPE__API_KEY', nil)
@@ -8,16 +9,16 @@ module InvoiceGenerator
 
     fakestore_client = FakeStoreAPIService::Client.new
 
-    carts = fakestore_client.get_carts_list
+    carts = fakestore_client.take_carts_list
     carts.each do |cart|
-      user = fakestore_client.get_user(cart['userId'])
+      user = fakestore_client.take_user(cart['userId'])
       customer = Stripe::Customer.create({
                                            email: user['email'],
                                            name: "#{user['firstname']} #{user['lastname']}"
                                          })
 
       invoice_items = cart['products'].map do |cart_product|
-        product_data = fakestore_client.get_product(cart_product['productId'])
+        product_data = fakestore_client.take_product(cart_product['productId'])
 
         stripe_product = Stripe::Product.create({
                                                   name: product_data['title']
@@ -26,7 +27,7 @@ module InvoiceGenerator
         stripe_price = Stripe::Price.create({
                                               product: stripe_product.id,
                                               currency: 'usd',
-                                              unit_amount: product_data['price']
+                                              unit_amount: product_data['price'].to_i
                                             })
 
         invoice_item = Stripe::InvoiceItem.create({
