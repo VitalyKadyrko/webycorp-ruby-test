@@ -16,6 +16,6 @@ end
 # There is a register method in the config gem
 # for Sinatra application, but it improper handles
 # a symbol from the Sinatra environment method
-setting_files = Config.setting_files(File.expand_path('..', __dir__), Application.environment)
+setting_files = Config.setting_files(File.expand_path('..', __dir__), ENV['RACK_ENV'] || 'development')
 
 Config.load_and_set_settings(setting_files)
