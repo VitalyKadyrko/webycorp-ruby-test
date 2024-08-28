@@ -7,8 +7,6 @@ module InvoiceGenerator
     process_carts
   end
 
-  private
-
   def self.configure_stripe
     Stripe.api_key = Settings.stripe.api_key
     Stripe.logger = Application.logger
