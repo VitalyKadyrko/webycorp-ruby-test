@@ -16,6 +16,6 @@ end
 # There is a register method in the config gem
 # for Sinatra application, but it improper handles
 # a symbol from the Sinatra environment method
-setting_files = Config.setting_files(File.expand_path('..', __dir__), Application.environment)
+Config.setting_files(File.expand_path('..', __dir__), Application.environment)
 
-Config.load_and_set_settings(setting_files)
+Config.load_and_set_settings('webycorp-ruby-test/config/settings/development.local.yml')
